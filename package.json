@@ -1,0 +1,20 @@
+{
+  "name": "chale",
+  "version": "0.1.0",
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org"
+  },
+  "description": "A collection of data models",
+  "main": "collection.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "author": "Ben Gourley",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "hat": "0.0.3",
+    "piton-pipe": "0.0.4",
+    "lodash.clonedeep": "~2.4.1",
+    "lodash.assign": "~2.4.1"
+  }
+}
