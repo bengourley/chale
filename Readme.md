@@ -6,8 +6,8 @@
 
 This is a base class for managing a collection of models. It's designed to be used with
 [Merstone models](https://github.com/bengourley/merstone) models, but the only opiniated
-piece of design is that the models it works with must have an `id` and a `cid` property.
-This means it would also be compatible with Backbone models.
+piece of design is that the models it works with must have an `id` and a `cid` property
+and be an [event emitter](http://nodejs.org/api/events.html#events_class_events_eventemitter).
 
 If you are used to Backbone, throw your notion of collections out of the window. In my opinion,
 Backbone Collections couple the two very distinct roles of a) managing a collection of models
@@ -59,16 +59,29 @@ c.on('remove', function (model) {
   console.log('A model was removed: id=' + model.id)
 })
 
-m.on('reset', function (models) {
+c.on('reset', function (models) {
   console.log('The collection was reset with ' + models.length + ' models')
 })
+
+//
+// Propagating model events
+//
+
+// By default 'change' and 'reset' events are propagated from models
+c.on('model:change', function (model) {})
+c.on('model:reset', function (model) {})
+
+// Propagate more events by telling the
+// constructor what you want to listen to
+var c = new Collection({}, [], [ 'change', 'reset', 'flip', 'flop' ])
+c.on('model:flip', function (model, …) {})
 
 //
 // Serialisation
 //
 
 // Creates a deep clone of the collection's models
-m.toJSON()
+c.toJSON()
 ```
 
 ## The name?

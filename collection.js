@@ -3,10 +3,13 @@ module.exports = Collection
 var EventEmitter = require('events').EventEmitter
   , clone = require('lodash.clonedeep')
 
-function Collection(serviceLocator, models) {
+function Collection(serviceLocator, models, propagatedModelEvents) {
   EventEmitter.apply(this)
   this.serviceLocator = serviceLocator
   this.models = models || []
+  this.propagatedModelEvents = propagatedModelEvents || [ 'change', 'reset' ]
+  this._boundEvents = []
+  this.models.forEach(this._startModelEventPropagation.bind(this))
 }
 
 // Inherit from event emitter
@@ -17,6 +20,7 @@ Collection.prototype.add = function (model) {
   if (this.get(model.cid)) return null
   if (model.id && this.get(model.id)) return null
   this.models.push(model)
+  this._startModelEventPropagation(model)
   this.emit('add', model)
   return true
 }
@@ -33,12 +37,14 @@ Collection.prototype.remove = function (id) {
   })
   if (!toDelete) return null
   this.models.splice(index, 1)
+  this._stopModelEventPropagation(toDelete)
   this.emit('remove', toDelete)
   return toDelete
 }
 
 Collection.prototype.reset = function (models) {
   if (!models) models = []
+  this.models.forEach(this._stopModelEventPropagation.bind(this))
   this.models = models
   this.emit('reset', models)
 }
@@ -60,4 +66,23 @@ Collection.prototype.toJSON = function () {
   return this.models.map(function (model) {
     return typeof model.toJSON === 'function' ? model.toJSON() : clone(model)
   })
+}
+
+Collection.prototype._startModelEventPropagation = function (model) {
+  // Propagate the desired events
+  this.propagatedModelEvents.forEach(function (event) {
+    var listener = { target: model, event: event, fn: this.emit.bind(this, 'model:' + event, model) }
+    this._boundEvents.push(listener)
+    model.on(event, listener.fn)
+  }.bind(this))
+}
+
+Collection.prototype._stopModelEventPropagation = function (model) {
+  // Unbind the model's events that were propagated
+  this._boundEvents
+    .filter(function (listener) { return listener.target === model })
+    .forEach(function (listener) {
+      model.removeListener(listener.event, listener.fn)
+    })
+  this._boundEvents = this._boundEvents.filter(function (listener) { return listener.target !== model })
 }
