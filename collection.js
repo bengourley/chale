@@ -1,6 +1,7 @@
 module.exports = Collection
 
 var EventEmitter = require('events').EventEmitter
+  , clone = require('lodash.clonedeep')
 
 function Collection(serviceLocator, models) {
   EventEmitter.apply(this)
@@ -12,14 +13,16 @@ function Collection(serviceLocator, models) {
 Collection.prototype = Object.create(EventEmitter.prototype)
 
 Collection.prototype.add = function (model) {
-  // Don't add duplicate models by id, cid but
-  // allow duplicate models if the model.id is null
-  if (this.get(model.cid) || model.id !== null && this.get(model.id)) return
+  // Don't allow duplicated cids or ids
+  if (this.get(model.cid)) return null
+  if (model.id && this.get(model.id)) return null
   this.models.push(model)
   this.emit('add', model)
+  return true
 }
 
 Collection.prototype.remove = function (id) {
+  if (!id) return null
   var toDelete, index
   this.models.some(function (model, i) {
     if (model.id === id || model.cid === id) {
@@ -31,7 +34,6 @@ Collection.prototype.remove = function (id) {
   if (!toDelete) return null
   this.models.splice(index, 1)
   this.emit('remove', toDelete)
-  toDelete.emit('remove')
   return toDelete
 }
 
@@ -42,6 +44,7 @@ Collection.prototype.reset = function (models) {
 }
 
 Collection.prototype.get = function (id) {
+  if (!id) return null
   var model
   this.models.some(function (m) {
     if (m.id === id || m.cid === id) {
@@ -55,6 +58,6 @@ Collection.prototype.get = function (id) {
 
 Collection.prototype.toJSON = function () {
   return this.models.map(function (model) {
-    return typeof model.toJSON === 'function' ? model.toJSON() : model
+    return typeof model.toJSON === 'function' ? model.toJSON() : clone(model)
   })
 }

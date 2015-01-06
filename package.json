@@ -7,14 +7,24 @@
   "description": "A collection of data models",
   "main": "collection.js",
   "scripts": {
-    "test": "npm test"
+    "lint": "jshint . --reporter=./node_modules/jshint-full-path/index.js",
+    "pretest": "npm run-script lint",
+    "test": "istanbul cover ./node_modules/.bin/_mocha -- -R spec",
+    "posttest": "istanbul check-coverage && rm -rf coverage",
+    "prepublish": "npm test && npm prune",
+    "browser-test": "zuul -- test/collection.test.js"
   },
   "author": "Ben Gourley",
   "license": "BSD-2-Clause",
   "dependencies": {
     "hat": "0.0.3",
-    "piton-pipe": "0.0.4",
-    "lodash.clonedeep": "~2.4.1",
-    "lodash.assign": "~2.4.1"
+    "lodash.assign": "~2.4.1",
+    "lodash.clonedeep": "^2.4.1",
+    "piton-pipe": "0.0.4"
+  },
+  "devDependencies": {
+    "istanbul": "^0.3.5",
+    "jshint-full-path": "^1.1.1",
+    "mocha": "^2.1.0"
   }
 }
