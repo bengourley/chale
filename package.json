@@ -21,10 +21,7 @@
   "author": "Ben Gourley",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "hat": "0.0.3",
-    "lodash.assign": "~2.4.1",
-    "lodash.clonedeep": "^2.4.1",
-    "piton-pipe": "0.0.4"
+    "lodash.clonedeep": "^2.4.1"
   },
   "devDependencies": {
     "istanbul": "^0.3.5",
