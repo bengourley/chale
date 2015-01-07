@@ -154,7 +154,7 @@ describe('model', function () {
     })
 
     it('should emit a reset event with the new set of models and the previous models', function (done) {
-      var previousModels = [ new Model({}, { _id: '123'} )]
+      var previousModels = [ new Model({}, { _id: '123' } ) ]
         , c = new Collection({}, previousModels)
         , models = [ new Model({}, { _id: '1' }), new Model({}, { _id: '2' }) ]
       c.on('reset', function (ms, prevs) {
