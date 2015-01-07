@@ -44,10 +44,11 @@ Collection.prototype.remove = function (id) {
 
 Collection.prototype.reset = function (models) {
   if (!models) models = []
+  var previousModels = this.models
   this.models.forEach(this._stopModelEventPropagation.bind(this))
   this.models = models
   this.models.forEach(this._startModelEventPropagation.bind(this))
-  this.emit('reset', models)
+  this.emit('reset', models, previousModels)
 }
 
 Collection.prototype.get = function (id) {

@@ -153,12 +153,14 @@ describe('model', function () {
       assert.deepEqual([], c.models)
     })
 
-    it('should emit a reset event with the new set of models', function (done) {
-      var c = new Collection({})
+    it('should emit a reset event with the new set of models and the previous models', function (done) {
+      var previousModels = [ new Model({}, { _id: '123'} )]
+        , c = new Collection({}, previousModels)
         , models = [ new Model({}, { _id: '1' }), new Model({}, { _id: '2' }) ]
-      c.on('reset', function (ms) {
+      c.on('reset', function (ms, prevs) {
         assert.equal(models, ms)
         assert.equal(c.models, ms)
+        assert.equal(previousModels, prevs)
         done()
       })
       c.reset(models)
