@@ -46,6 +46,7 @@ Collection.prototype.reset = function (models) {
   if (!models) models = []
   this.models.forEach(this._stopModelEventPropagation.bind(this))
   this.models = models
+  this.models.forEach(this._startModelEventPropagation.bind(this))
   this.emit('reset', models)
 }
 

@@ -244,7 +244,7 @@ describe('model', function () {
 
     })
 
-    it('should stop propagating events when reset() is called', function (done) {
+    it('should stop propagating events on old models when reset() is called', function (done) {
 
       setTimeout(done, 10)
 
@@ -260,10 +260,24 @@ describe('model', function () {
 
     })
 
-    it('should propagate additional events with propagateModelEvents()', function (done) {
+    it('should start propagating events on new models when reset() is called', function (done) {
 
       var m = new Model({})
-        , c = new Collection({}, [ m ], [ 'change', 'reset', 'flop' ])
+        , c = new Collection({}, [])
+
+      c.on('model:change', function () {
+        done()
+      })
+
+      c.reset([ m ])
+      m.set('a', 10)
+
+    })
+
+    it('should propagate additional events given in the constructor', function (done) {
+
+      var m = new Model({})
+        , c = new Collection({}, [ m ], [ 'flop' ])
 
       c.on('model:flop', function (model) {
         assert.equal(model, m)
