@@ -46,6 +46,21 @@ c.add(new Model(serviceLocator, { _id: '123' }))
 c.get('123')
 c.remove('123')
 c.reset([ new Model(serviceLocator, { _id: '234' }), new Model(serviceLocator, { _id: '345' }) ])
+c.at(5) // Retrieves model at the given index
+
+// Array methods
+// The following array methods are copied onto the Collection prototype.
+// These work on the collection.models array:
+
+c.forEach(…)
+c.map(…)
+c.filter(…)
+c.reduce(…)
+c.reduceRight(…)
+c.every(…)
+c.some(…)
+c.concat(…)
+c.slice(…)
 
 //
 // Events
