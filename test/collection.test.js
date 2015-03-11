@@ -292,6 +292,21 @@ describe('model', function () {
 
   })
 
+  describe('at()', function () {
+
+    it('should retrieve a model at the given index', function () {
+      var m = new Model({}, { a: 20 })
+        , c = new Collection({}, [ new Model({}, { a: 10 }), m ])
+      assert.equal(m, c.at(1))
+    })
+
+    it('should return undefined if a model does not exist at the given index', function () {
+      var c = new Collection({})
+      assert.equal(undefined, c.at(2))
+    })
+
+  })
+
   describe('array methods', function () {
 
     it('should expose array methods on the collection object', function () {

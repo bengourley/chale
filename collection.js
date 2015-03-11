@@ -64,6 +64,10 @@ Collection.prototype.get = function (id) {
   return model
 }
 
+Collection.prototype.at = function (i) {
+  return this.models[i]
+}
+
 Collection.prototype.toJSON = function () {
   return this.models.map(function (model) {
     return typeof model.toJSON === 'function' ? model.toJSON() : clone(model)
