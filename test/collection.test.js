@@ -292,4 +292,17 @@ describe('model', function () {
 
   })
 
+  describe('array methods', function () {
+
+    it('should expose array methods on the collection object', function () {
+
+      var c = new Collection({}, [ new Model({}, { a: 10 }), new Model({}, { a: 20 }) ])
+      assert.deepEqual([ 10, 20 ], c.map(function (m) { return m.get('a') }))
+      assert.deepEqual(30, c.reduce(function (prev, m) { return prev + m.get('a') }, 0))
+      assert.deepEqual([ c.models[0] ], c.filter(function (m) { return m.get('a') === 10 }))
+
+    })
+
+  })
+
 })

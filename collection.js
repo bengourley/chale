@@ -88,3 +88,28 @@ Collection.prototype._stopModelEventPropagation = function (model) {
     })
   this._boundEvents = this._boundEvents.filter(function (listener) { return listener.target !== model })
 }
+
+var arrayFns =
+
+  // Iterators
+  [ 'forEach'
+  , 'map'
+  , 'filter'
+  , 'reduce'
+  , 'reduceRight'
+  , 'every'
+  , 'some'
+
+  // Accessors
+  , 'concat'
+  , 'slice'
+
+  ]
+
+// Hoist non-mutatey array functions on to the collection
+// class that work on the collection.models array
+arrayFns.forEach(function (name) {
+  Collection.prototype[name] = function () {
+    return this.models[name].apply(this.models, arguments)
+  }
+})
