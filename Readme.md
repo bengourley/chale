@@ -62,6 +62,9 @@ c.some(…)
 c.concat(…)
 c.slice(…)
 
+// Length property
+c.length
+
 //
 // Events
 //
