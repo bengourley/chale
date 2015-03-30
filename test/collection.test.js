@@ -320,4 +320,17 @@ describe('model', function () {
 
   })
 
+  describe('.length property', function () {
+
+    it('should reflect the currenty length of the collection’s models array', function () {
+      var c = new Collection({}, [ new Model({}, { a: 10 }), new Model({}, { a: 20 }) ])
+      assert.equal(2, c.length)
+      c.add(new Model({}, { a: 30 }))
+      assert.equal(3, c.length)
+      c.reset()
+      assert.equal(0, c.length)
+    })
+
+  })
+
 })

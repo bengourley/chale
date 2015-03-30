@@ -117,3 +117,5 @@ arrayFns.forEach(function (name) {
     return this.models[name].apply(this.models, arguments)
   }
 })
+
+Object.defineProperty(Collection.prototype, 'length', { get: function () { return this.models.length } })
