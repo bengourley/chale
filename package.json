@@ -1,6 +1,6 @@
 {
   "name": "chale",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publishConfig": {
     "registry": "http://registry.npmjs.org"
   },
